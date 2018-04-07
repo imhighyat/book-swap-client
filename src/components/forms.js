@@ -1,16 +1,24 @@
 import React from 'react';
+import {connect} from 'react-redux';
+
 import SignUp from './sign-up';
 import LogIn from './log-in';
 
-export default function Forms(props) {
-	const form = props.userEntry === 'signup' ? (
-			<SignUp onCancel={props.onCancel} />
-		) : (
-			<LogIn onCancel={props.onCancel} />
+export class Forms extends React.Component {
+	render(){
+		console.log(this.props);
+		return (
+	        <div className='forms'>
+	        	{ this.props.match.params.type === 'signup' && <SignUp /> }
+	        	{ this.props.match.params.type === 'login' && <LogIn /> }
+	        </div>
 		);
-	return (
-        <div className='forms'>
-        	{ form }
-        </div>
-	);
+	}
+	
 }
+
+const mapStateToProps = state => ({
+	userEntry: state.userEntry
+});
+
+export default connect(mapStateToProps)(Forms);

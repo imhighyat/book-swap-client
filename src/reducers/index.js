@@ -17,8 +17,53 @@ const initialState = {
         username: 'hayats',
         password: '*****'
     },
-    currentTab: 'profile',
-    editing: null
+    currentTab: 'browse',
+    editing: null,
+    bookView: 'users',
+    viewingBookInfo:{
+        isbn: '456789',
+        thumbnail: 'http://www.dogbreedslist.info/uploads/allimg/dog-pictures/Papillon-dog-1.jpg',
+        title: 'some title',
+        author: 'some author',
+        summary: 'some summary'
+    },
+    viewingUsersOffering: ['456689', '46968968', '4361796789'],
+    browse: {
+        category: 'author',
+        term: 'rowling',
+        results: [
+            {
+                thumbnail: 'https://uploads.scratch.mit.edu/users/avatars/31396620.png',
+                title: 'Book Title 1',
+                author: 'author 1',
+                isbn: '456789',
+                bookId: '123'
+            },
+            {
+                thumbnail: 'https://uploads.scratch.mit.edu/users/avatars/31396620.png',
+                title: 'Book Title 1',
+                author: 'author 1',
+                isbn: '687',
+                bookId: '123'
+            },
+            {
+                thumbnail: 'https://uploads.scratch.mit.edu/users/avatars/31396620.png',
+                title: 'Book Title 1',
+                author: 'author 1',
+                isbn: '7879',
+                bookId: '123'
+            },
+            {
+                thumbnail: 'https://uploads.scratch.mit.edu/users/avatars/31396620.png',
+                title: 'Book Title 1',
+                author: 'author 1',
+                isbn: '6965',
+                bookId: '123'
+            }
+        ],
+        totalItems: 12,
+        pageNumber: 1
+    }
 };
 
 export const bookReducer = (state=initialState, action) => {
@@ -62,6 +107,62 @@ export const bookReducer = (state=initialState, action) => {
 
     if(action.type === 'CANCEL_EDIT'){
         return Object.assign({}, state, { editing: null  });
+    }
+
+    if(action.type === 'SAVE_EDIT'){
+        if(action.input === 'email'){
+            return Object.assign({}, 
+                state, 
+                { 
+                    editing: null,
+                    userInfo: {...state.userInfo, email: action.value }
+                }
+            );
+        }
+        else if(action.input === 'phone'){
+            return Object.assign({}, 
+                state, 
+                {
+                    editing: null,
+                    userInfo: {...state.userInfo, phone: action.value }
+                }
+            );
+        }
+        else if(action.input === 'address'){
+            return Object.assign({}, 
+                state, 
+                {
+                    editing: null,
+                    userInfo: {...state.userInfo, address: action.value }
+                }
+            );
+        }
+        else if(action.input === 'password'){
+            return Object.assign({}, 
+                state, 
+                {
+                    editing: null,
+                    userInfo: {...state.userInfo, password: action.value }
+                }
+            );
+        }
+    }
+
+    if(action.type === 'SEARCH_CLICK'){
+        return Object.assign({}, 
+            state, 
+            {
+                browse: {...state.browse, category: action.category, term: action.term}
+            }
+        );
+    }
+
+    if(action.type === 'SHOW_BOOK_INFO'){
+        console.log('showing book');
+    }
+
+    if(action.type === 'SHOW_USERS_OFFERING'){
+        console.log('showing users');
     }
 
     return state;

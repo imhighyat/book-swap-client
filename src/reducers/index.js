@@ -3,9 +3,9 @@ import * as actions from '../actions';
 const initialState = {
     authenticated: true,
     loading: false,
-    userEntry: null,
+    userEntry: null, //'login', 'signup'
     userInfo:{
-        name: 'Hayat Mazz',
+        name: 'Queen Emma',
         email: 'email@me.com',
         address: {
             street: '123 Main St',
@@ -17,9 +17,47 @@ const initialState = {
         username: 'hayats',
         password: '*****'
     },
-    currentTab: 'browse',
+    userLibrary:[
+        {
+            thumbnail: 'https://uploads.scratch.mit.edu/users/avatars/31396620.png',
+            title: 'Book Title 1',
+            author: 'author 1',
+            isbn: '456789',
+            bookId: '123',
+            status: 'available',
+            summary: 'A short description'
+        },
+        {
+            thumbnail: 'https://uploads.scratch.mit.edu/users/avatars/31396620.png',
+            title: 'Book Title 1',
+            author: 'author 1',
+            isbn: '687',
+            bookId: '123',
+            status: 'pending',
+            summary: 'A short description'
+        },
+        {
+            thumbnail: 'https://uploads.scratch.mit.edu/users/avatars/31396620.png',
+            title: 'Book Title 1',
+            author: 'author 1',
+            isbn: '7879',
+            bookId: '123',
+            status: 'available',
+            summary: 'A short description'
+        },
+        {
+            thumbnail: 'https://uploads.scratch.mit.edu/users/avatars/31396620.png',
+            title: 'Book Title 1',
+            author: 'author 1',
+            isbn: '6965',
+            bookId: '123',
+            status: 'pending',
+            summary: 'A short description'
+        }
+    ],
+    currentTab: 'library',
     editing: null,
-    bookView: 'users',
+    bookView: 'users', //'users', 'info', null
     viewingBookInfo:{
         isbn: '456789',
         thumbnail: 'http://www.dogbreedslist.info/uploads/allimg/dog-pictures/Papillon-dog-1.jpg',
@@ -61,8 +99,8 @@ const initialState = {
                 bookId: '123'
             }
         ],
-        totalItems: 12,
-        pageNumber: 1
+        totalItems: 22,
+        pageNumber: 2
     }
 };
 
@@ -158,11 +196,39 @@ export const bookReducer = (state=initialState, action) => {
     }
 
     if(action.type === 'SHOW_BOOK_INFO'){
-        console.log('showing book');
+        console.log('showing book info');
+        //use the isbn to search book from the collection
+        //update the state with viewingBookInfo from API
+        return Object.assign({}, state, { bookView: 'info' });
     }
 
     if(action.type === 'SHOW_USERS_OFFERING'){
-        console.log('showing users');
+        console.log('showing users offering');
+        //use the isbn to search users who are offering the book
+        //update the state with viewingUsersOffering from API
+        return Object.assign({}, state, { bookView: 'users' });
+    }
+
+    if(action.type === 'LOADING_OFF'){
+        console.log('turning loading off');
+    }
+
+    if(action.type === 'PAGINATION_CLICK'){
+        console.log(action.button);
+        if(action.button === 'next'){
+            return Object.assign({}, state, { browse: {...state.browse, pageNumber: state.browse.pageNumber + 1 }});
+        }
+        return Object.assign({}, state, { browse: {...state.browse, pageNumber: state.browse.pageNumber - 1 }});
+
+    }
+
+    if(action.type === 'CLOSE_BOOK_VIEW'){
+        return Object.assign({}, state, { bookView: null });
+    }
+
+    if(action.type === 'DELETE_BOOK'){
+        const filteredLibrary = state.userLibrary.filter((item, index) => index !== action.index);
+        return Object.assign({}, state, { userLibrary: filteredLibrary });
     }
 
     return state;

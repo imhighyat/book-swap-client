@@ -1,7 +1,12 @@
 import React from 'react';
 import {connect} from 'react-redux';
+import {closeBookView} from '../actions';
 
 export class BookView extends React.Component{
+	handleClose(e){
+		e.preventDefault();
+		this.props.dispatch(closeBookView());
+	}
 
 	render(){
 		if(this.props.bookView === 'users'){
@@ -14,6 +19,7 @@ export class BookView extends React.Component{
 		        <div className='book-view-users'>
 		        	<img src={this.props.viewingBookInfo.thumbnail} />
 		        	<ul>{usersList}</ul>
+		        	<button onClick={e=>this.handleClose(e)}>Close</button>
 		        </div>
 			);
 		}
@@ -23,6 +29,7 @@ export class BookView extends React.Component{
 	        	<h3>{this.props.viewingBookInfo.title}</h3>
 	        	<h4>{this.props.viewingBookInfo.author}</h4>
 	        	<p>{this.props.viewingBookInfo.summary}</p>
+	        	<button onClick={e=>this.handleClose(e)}>Close</button>
 	        </div>
 		);
 	}

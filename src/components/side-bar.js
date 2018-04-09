@@ -1,3 +1,4 @@
+
 import React from 'react';
 import {connect} from 'react-redux';
 import {switchTab, logOutClick} from '../actions';
@@ -29,9 +30,6 @@ export class SideBar extends React.Component{
         );
     }
 }
-
-
-//need currentTab to style which one is currently active
 
 const mapStateToProps = state => ({
     currentTab: state.currentTab

@@ -3,6 +3,17 @@ export const cancelEdit = () => ({
 	type: CANCEL_EDIT
 });
 
+export const CLOSE_BOOK_VIEW = 'CLOSE_BOOK_VIEW';
+export const closeBookView = () => ({
+	type: CLOSE_BOOK_VIEW
+});
+
+export const DELETE_BOOK = 'DELETE_BOOK';
+export const deleteBook = index => ({
+    type: DELETE_BOOK,
+    index
+});
+
 export const DEMO_LOG_IN = 'DEMO_LOG_IN';
 export const demoLogIn = () => ({
     type: DEMO_LOG_IN
@@ -14,6 +25,11 @@ export const editInfo = info => ({
 	info
 });
 
+export const LOADING_OFF = 'LOADING_OFF';
+export const loadingOff = () => ({
+	type: LOADING_OFF
+});
+
 export const LOG_IN_CLICK = 'LOG_IN_CLICK';
 export const logInClick = button => ({
 	type: LOG_IN_CLICK,
@@ -22,7 +38,13 @@ export const logInClick = button => ({
 
 export const LOG_OUT_CLICK = 'LOG_OUT_CLICK';
 export const logOutClick = () => ({
-	type: LOG_OUT_CLICK,
+	type: LOG_OUT_CLICK
+});
+
+export const PAGINATION_CLICK = 'PAGINATION_CLICK';
+export const paginationClick = button => ({
+	type: PAGINATION_CLICK,
+	button
 });
 
 export const SAVE_EDIT = 'SAVE_EDIT';

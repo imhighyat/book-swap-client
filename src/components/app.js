@@ -33,9 +33,7 @@ export class App extends React.Component {
 }
 
 const mapsStateToProps = state => ({
-	userEntry: state.userEntry,
-	loading: state.loading,
-	authenticated: state.authenticated
+	loading: state.loading
 });
 
 export default connect(mapsStateToProps)(App);

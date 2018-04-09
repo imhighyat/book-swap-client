@@ -4,10 +4,9 @@ import {Link} from 'react-router-dom';
 import {demoLogIn} from '../actions';
 
 export class TopNav extends React.Component{
-	clickHandler(e){
+	demoHandler(e){
 		e.preventDefault();
 		this.props.dispatch(demoLogIn());
-		//this.props.history.push('/dashboard');
 	}
 	render(){
 		return (
@@ -15,7 +14,7 @@ export class TopNav extends React.Component{
 	        	{ !this.props.authenticated && <Link to='/forms/signup' >Sign Up</Link> }
 	        	{ !this.props.authenticated && <Link to='/forms/login' >Log In</Link>}
 	        	<Link to='/'>BookSwap</Link>
-	        	{ !this.props.authenticated && <a href='/dashboard' onClick={e=> this.clickHandler(e)}>Demo Account</a> }
+	        	{ !this.props.authenticated && <a href='/dashboard' onClick={e=> this.demoHandler(e)}>Demo Account</a> }
 	        	<Link to='/'>About</Link>
 	        </div>
 		);

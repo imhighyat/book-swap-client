@@ -3,10 +3,6 @@ import {connect} from 'react-redux';
 import {editInfo, cancelEdit, saveEdit} from '../actions';
 
 export class Profile extends React.Component{
-    onChange(input){
-        console.log(input);
-    }
-
     onEdit(e, info){
         e.preventDefault();
         this.props.dispatch(editInfo(info));
@@ -20,7 +16,6 @@ export class Profile extends React.Component{
     onSaveEdit(e, input){
         e.preventDefault();
         if(input === 'address'){
-            console.log(this.refs);
             this.props.dispatch(
                 saveEdit(input,
                     {

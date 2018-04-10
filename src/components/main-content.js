@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import Profile from './profile';
 import Browse from './browse';
 import Library from './library';
+import Requests from './requests';
 
 export function MainContent(props){
 		return (
@@ -11,6 +12,7 @@ export function MainContent(props){
 	        	{ props.currentTab === 'profile' && <Profile /> }
 	        	{ props.currentTab === 'browse' && <Browse /> }
 	        	{ props.currentTab === 'library' && <Library /> }
+	        	{ props.currentTab === 'requests' && <Requests /> }
 	        </div>
 		);
 }

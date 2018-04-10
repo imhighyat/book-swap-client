@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {deleteBook} from '../actions';
+import {deleteBook, showAddBookView, hideAddBookView, addBook} from '../actions';
 
 export class Library extends React.Component{
 	handleDeleteBook(e, index){
@@ -8,12 +8,39 @@ export class Library extends React.Component{
 		this.props.dispatch(deleteBook(index));
 	}
 
+	showAddBook(e){
+		e.preventDefault();
+		this.props.dispatch(showAddBookView());
+	}
+
+	hideAddBook(e){
+		e.preventDefault();
+		this.props.dispatch(hideAddBookView());
+	}
+
+	addBookToLibrary(e){
+		e.preventDefault();
+		const isbn = this.refs.isbn.value;
+		if(isbn){
+			console.log(isbn);
+			this.refs.isbn.value = '';
+			return this.props.dispatch(addBook(isbn));
+		}
+		console.log('no value');
+	}
+
 	render(){
 		if(this.props.userLibrary.length < 1){
 			return (
 				<div className='library'>
-					<p>You do not have books to swap. Click the button below to start.</p>
-					<button>Add book</button>
+					<p>You do not have books to swap. Click the button below to start. </p>
+					<button onClick={e=>this.showAddBook(e)}>Add book</button>
+					{this.props.addBookView === 'show' && <div className='add-book-modal'>
+						<p>Please enter the ISBN of the book you want to add. On most books, the ISBN number can be found on the back cover, next to the barcode.</p>
+						<input ref='isbn' />
+						<button onClick={e=> this.hideAddBook(e)}>Cancel</button>
+						<button onClick={e=> this.addBookToLibrary(e)}>Add</button>
+					</div> }
 				</div>
 			);
 		}
@@ -25,7 +52,7 @@ export class Library extends React.Component{
 		        		<h4>{entry.title}</h4>
 		        		<h4>{entry.author}</h4>
 		        		<h4>{entry.isbn}</h4>
-		        		<p>{entry.summary}</p>
+		        		<p>{entry.summary}</p>	
 		        		<button onClick={(e, index)=>this.handleDeleteBook(e, position)}><i className="far fa-times-circle"></i></button>
 					</div>
 				</li>
@@ -35,14 +62,21 @@ export class Library extends React.Component{
 		return (
 			<div className='library'>
 				<ul>{bookList}</ul>
-				<button>Add book</button>
+				<button onClick={e=>this.showAddBook(e)}>Add book</button>
+				{this.props.addBookView === 'show' && <div className='add-book-modal'>
+					<p>Please enter the ISBN of the book you want to add. On most books, the ISBN number can be found on the back cover, next to the barcode.</p>
+					<input ref='isbn' />
+					<button onClick={e=> this.hideAddBook(e)}>Cancel</button>
+					<button onClick={e=> this.addBookToLibrary(e)}>Add</button>
+				</div> }
 			</div>
 		);
 	}
 }
 
 const mapStateToProps = state =>({
-	userLibrary: state.userLibrary
+	userLibrary: state.userLibrary,
+	addBookView: state.addBookView
 });
 
 export default connect(mapStateToProps)(Library);

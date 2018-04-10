@@ -1,6 +1,18 @@
+export const ADD_BOOK = 'ADD_BOOK';
+export const addBook = isbn => ({
+	type: ADD_BOOK,
+	isbn
+});
+
 export const CANCEL_EDIT = 'CANCEL_EDIT';
 export const cancelEdit = () => ({
 	type: CANCEL_EDIT
+});
+
+export const CANCEL_REQUEST = 'CANCEL_REQUEST';
+export const cancelRequest = index => ({
+	type: CANCEL_REQUEST,
+	index
 });
 
 export const CLOSE_BOOK_VIEW = 'CLOSE_BOOK_VIEW';
@@ -23,6 +35,11 @@ export const EDIT_INFO = 'EDIT_INFO';
 export const editInfo = info => ({
 	type: EDIT_INFO,
 	info
+});
+
+export const HIDE_ADD_BOOK_VIEW = 'HIDE_ADD_BOOK_VIEW';
+export const hideAddBookView = () => ({
+	type: HIDE_ADD_BOOK_VIEW
 });
 
 export const LOADING_OFF = 'LOADING_OFF';
@@ -61,6 +78,11 @@ export const searchClick = (category, term) => ({
 	term
 });
 
+export const SHOW_ADD_BOOK_VIEW = 'SHOW_ADD_BOOK_VIEW';
+export const showAddBookView = () => ({
+	type: SHOW_ADD_BOOK_VIEW
+});
+
 export const SHOW_BOOK_INFO = 'SHOW_BOOK_INFO';
 export const showBookInfo = isbn => ({
 	type: SHOW_BOOK_INFO,
@@ -83,4 +105,10 @@ export const SWITCH_TAB = 'SWITCH_TAB';
 export const switchTab = tab => ({
 	type: SWITCH_TAB,
 	tab
+});
+
+export const SWITCH_RESULTS_FILTER = 'SWITCH_RESULTS_FILTER';
+export const switchResultsFilter = filter => ({
+	type: SWITCH_RESULTS_FILTER,
+	filter
 });

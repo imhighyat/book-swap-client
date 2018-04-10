@@ -55,8 +55,68 @@ const initialState = {
             summary: 'A short description'
         }
     ],
-    currentTab: 'library',
+    requests:[
+        {
+            origin: 'me',
+            status: 'pending',
+            otherUser: 'Jane Doe',
+            book: 'Book 1',
+            date: 'March 20, 2018'
+        },
+        {
+            origin: 'others',
+            status: 'pending',
+            otherUser: 'Jane Doe',
+            book: 'Book 1',
+            date: 'March 20, 2018'
+        },
+        {
+            origin: 'me',
+            status: 'accepted',
+            otherUser: 'Jane Doe',
+            book: 'Book 1',
+            date: 'March 20, 2018'
+        },
+        {
+            origin: 'others',
+            status: 'accepted',
+            otherUser: 'Jane Doe',
+            book: 'Book 1',
+            date: 'March 20, 2018'
+        },
+        {
+            origin: 'me',
+            status: 'declined',
+            otherUser: 'Jane Doe',
+            book: 'Book 1',
+            date: 'March 20, 2018'
+        },
+        {
+            origin: 'others',
+            status: 'declined',
+            otherUser: 'Jane Doe',
+            book: 'Book 1',
+            date: 'March 20, 2018'
+        },
+        {
+            origin: 'me',
+            status: 'cancelled',
+            otherUser: 'Jane Doe',
+            book: 'Book 1',
+            date: 'March 20, 2018'
+        },
+        {
+            origin: 'others',
+            status: 'cancelled',
+            otherUser: 'Jane Doe',
+            book: 'Book 1',
+            date: 'March 20, 2018'
+        }        
+    ],
+    currentRequestsFilter: 'all',
+    currentTab: 'requests',
     editing: null,
+    addBookView: 'hidden',
     bookView: 'users', //'users', 'info', null
     viewingBookInfo:{
         isbn: '456789',
@@ -229,6 +289,46 @@ export const bookReducer = (state=initialState, action) => {
     if(action.type === 'DELETE_BOOK'){
         const filteredLibrary = state.userLibrary.filter((item, index) => index !== action.index);
         return Object.assign({}, state, { userLibrary: filteredLibrary });
+    }
+
+    if(action.type === 'SHOW_ADD_BOOK_VIEW'){
+        return Object.assign({}, state, { addBookView: 'show' });
+    }
+
+    if(action.type === 'HIDE_ADD_BOOK_VIEW'){
+        return Object.assign({}, state, { addBookView: 'hidden' });
+    }
+
+    if(action.type === 'ADD_BOOK'){
+        console.log('adding book');
+        //make a call to the api to add the book to db
+        //close the add book view when call is successful and return the new library array
+        return Object.assign({}, state, { addBookView: 'hidden' });
+    }
+
+    if(action.type === 'SWITCH_RESULTS_FILTER'){
+        if(action.filter === 'all'){
+            return Object.assign({}, state, { currentRequestsFilter: 'all' });
+        }
+        else if(action.filter === 'me'){
+            return Object.assign({}, state, { currentRequestsFilter: 'me' });
+        }
+        else{
+            return Object.assign({}, state, { currentRequestsFilter: 'others' });
+        }
+    }
+
+    if(action.type === 'CANCEL_REQUEST'){
+        //update the status of the request in index to 'cancelled'
+        const updatedList = state.requests.map((request, index) => {
+            //if the index is the same as the index passed
+            if(index !== action.index){
+                return request;
+            }
+            return Object.assign({}, request, {status: 'cancelled'});
+        });
+
+        return Object.assign({}, state, { requests: updatedList });
     }
 
     return state;

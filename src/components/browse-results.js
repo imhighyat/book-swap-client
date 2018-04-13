@@ -16,14 +16,14 @@ export class BrowseResults extends React.Component{
 	render(){
 		if(this.props.totalItems){
 			const resultList = this.props.results.map((list, index) => {
-				return (<li key={list.isbn}>
+				return (<li key={index}>
 					<div>
-						<img src='https://uploads.scratch.mit.edu/users/avatars/31396620.png' />
+						<img src={list.thumbnail} alt={list.title}/>
 						<h4>{list.title}</h4>
-						<p>{list.author}</p>
+						<p>{list.authors.join(', ')}</p>
 						<div className='book-links'>
-							<a href="#" onClick={(e,isbn) => this.bookInfoClick(e, list.isbn)}>Book Info</a>
-							<a href="#" onClick={(e,isbn) => this.usersOfferingClick(e, list.isbn)}>Users Offering</a>
+							<a href="#" onClick={(e,isbn) => this.bookInfoClick(e, list.isbn[0])}>Book Info</a>
+							<a href="#" onClick={(e,isbn) => this.usersOfferingClick(e, list.isbn[0])}>Users Offering</a>
 						</div>
 					</div>
 				</li>)

@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {searchClick} from '../actions';
+import {bookSearch} from '../actions';
 
 export class SearchForm extends React.Component{
     handleSearch(e){
@@ -8,7 +8,7 @@ export class SearchForm extends React.Component{
         const term = this.refs.search.value;
         if(term){
             this.refs.search.value = '';
-            this.props.dispatch(searchClick(this.category.value, term));
+            this.props.dispatch(bookSearch(this.category.value, term));
         }
     }
 

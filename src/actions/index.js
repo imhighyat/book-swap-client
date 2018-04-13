@@ -9,6 +9,36 @@ export const backToHome = () => ({
 	type: BACK_TO_HOME
 });
 
+export const BOOK_SEARCH = 'BOOK_SEARCH';
+export const BOOK_SEARCH_SUCCESS = 'BOOK_SEARCH_SUCCESS';
+export const BOOK_SEARCH_ERROR = 'BOOK_SEARCH_ERROR';
+export const bookSearch = (category, term) => dispatch => {
+	dispatch({
+		type: BOOK_SEARCH,
+		category,
+		term
+	});
+	const parsedTerm = term.split(' ').join('%20');
+	//initial search does not need to have page number
+	fetch(`http://localhost:8080/api/search?${category}=${parsedTerm}`)
+		.then(res => {
+			if(!res.ok){
+				return Promise.reject(res.statusText);
+			}
+			return res.json();
+		})
+		.then(browseResult => {
+			dispatch({
+				type: BOOK_SEARCH_SUCCESS,
+				payload: browseResult
+			});
+		})
+		.catch(err => {
+			console.log(err);
+			dispatch({ type: BOOK_SEARCH_ERROR });
+		});
+}
+
 export const CANCEL_EDIT = 'CANCEL_EDIT';
 export const cancelEdit = () => ({
 	type: CANCEL_EDIT
@@ -45,7 +75,7 @@ export const fetchProfile = () => dispatch => {
 		type: FETCH_PROFILE
 	});
 	setTimeout(()=>{
-		fetch('http://localhost:8082/api/users/5aaf709e4442560d94f96255')
+		fetch('http://localhost:8080/api/users/5aaf709e4442560d94f96255')
 			.then(res => {
 				if(!res.ok){
 					return Promise.reject(res.statusText);
@@ -90,13 +120,6 @@ export const PAGINATION_CLICK = 'PAGINATION_CLICK';
 export const paginationClick = button => ({
 	type: PAGINATION_CLICK,
 	button
-});
-
-export const SEARCH_CLICK = 'SEARCH_CLICK';
-export const searchClick = (category, term) => ({
-	type: SEARCH_CLICK,
-	category,
-	term
 });
 
 export const SHOW_ADD_BOOK_VIEW = 'SHOW_ADD_BOOK_VIEW';
@@ -153,7 +176,7 @@ export const updateProfile = (input, value) => dispatch => {
 	dispatch({
 		type: UPDATE_PROFILE
 	});
-	fetch('http://localhost:8082/api/users/5aaf709e4442560d94f96255', {
+	fetch('http://localhost:8080/api/users/5aaf709e4442560d94f96255', {
 		method: 'PUT',
 		body: JSON.stringify({
 			id: '5aaf709e4442560d94f96255',

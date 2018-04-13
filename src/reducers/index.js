@@ -127,40 +127,11 @@ const initialState = {
     },
     viewingUsersOffering: ['456689', '46968968', '4361796789'],
     browse: {
-        category: 'author',
-        term: 'rowling',
-        results: [
-            {
-                thumbnail: 'https://uploads.scratch.mit.edu/users/avatars/31396620.png',
-                title: 'Book Title 1',
-                author: 'author 1',
-                isbn: '456789',
-                bookId: '123'
-            },
-            {
-                thumbnail: 'https://uploads.scratch.mit.edu/users/avatars/31396620.png',
-                title: 'Book Title 1',
-                author: 'author 1',
-                isbn: '687',
-                bookId: '123'
-            },
-            {
-                thumbnail: 'https://uploads.scratch.mit.edu/users/avatars/31396620.png',
-                title: 'Book Title 1',
-                author: 'author 1',
-                isbn: '7879',
-                bookId: '123'
-            },
-            {
-                thumbnail: 'https://uploads.scratch.mit.edu/users/avatars/31396620.png',
-                title: 'Book Title 1',
-                author: 'author 1',
-                isbn: '6965',
-                bookId: '123'
-            }
-        ],
-        totalItems: 22,
-        pageNumber: 2
+        category: '',
+        term: '',
+        results: [],
+        totalItems: 0,
+        pageNumber: 1
     }
 };
 
@@ -203,13 +174,64 @@ export const bookReducer = (state=initialState, action) => {
         return Object.assign({}, state, { editing: null  });
     }
 
-    if(action.type === 'SEARCH_CLICK'){
-        return Object.assign({}, 
-            state, 
-            {
-                browse: {...state.browse, category: action.category, term: action.term}
-            }
-        );
+    if(action.type === 'BOOK_SEARCH'){
+        return Object.assign({}, state, { browse: { ...state.browse, category: action.category, term: action.term }});
+    }
+
+    if(action.type === 'BOOK_SEARCH_SUCCESS'){
+        //if the results came from the collection
+        if(action.payload.origin === 'collection'){
+            const bookList = action.payload.data.map(book => {
+                if(book.images === undefined){
+                    return {
+                        title: book.title,
+                        authors: book.authors,
+                        isbn: book.isbn,
+                        bookId: book._id,
+                        thumbnail: 'http://i.imgur.com/sJ3CT4V.gif'
+                    }
+                }
+                else{
+                    return {
+                        title: book.title,
+                        authors: book.authors,
+                        isbn: book.isbn,
+                        bookId: book._id,
+                        thumbnail: book.images.smallThumbnail
+                    }
+                }
+            });
+            return Object.assign({}, state, {browse: {...state.browse, results: bookList, totalItems: action.payload.totalItems}});
+        }
+        else{
+            let isbn, images, summary, authors;
+            const bookList = action.payload.data.map(book => {
+                book.hasOwnProperty('industryIdentifiers') ?
+                    isbn = book.industryIdentifiers.map(obj => obj.identifier) : 
+                        isbn = [];
+                book.hasOwnProperty('imageLinks') ?
+                    images = book.imageLinks : 
+                        images = { smallThumbnail: 'http://i.imgur.com/sJ3CT4V.gif'};
+                book.hasOwnProperty('description') ?
+                    summary = book.description : 
+                        summary = 'No summary provided for this book.';
+                book.hasOwnProperty('authors') ?
+                    authors = book.authors : 
+                        authors = [];
+                return {
+                    title: book.title,
+                    authors: authors,
+                    isbn: isbn,
+                    thumbnail: images.smallThumbnail
+                }
+            });
+
+            return Object.assign({}, state, {browse: {...state.browse, results: bookList, totalItems: action.payload.totalItems}});
+        }
+    }
+
+    if(action.type === 'BOOK_SEARCH_ERROR'){
+        console.log('error');
     }
 
     if(action.type === 'SHOW_BOOK_INFO'){

@@ -6,11 +6,10 @@ import LogIn from './log-in';
 
 export class Forms extends React.Component {
 	render(){
-		console.log(this.props);
 		return (
 	        <div className='forms'>
-	        	{ this.props.match.params.type === 'signup' && <SignUp /> }
-	        	{ this.props.match.params.type === 'login' && <LogIn /> }
+	        	{ this.props.userEntry === 'signup' && <SignUp /> }
+	        	{ this.props.userEntry === 'login' && <LogIn /> }
 	        </div>
 		);
 	}

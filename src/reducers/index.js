@@ -1,21 +1,21 @@
 import * as actions from '../actions';
 
 const initialState = {
-    authenticated: true,
+    authenticated: false,
     loading: false,
     userEntry: null, //'login', 'signup'
     userInfo:{
-        name: 'Queen Emma',
-        email: 'email@me.com',
+        name: '',
         address: {
-            street: '123 Main St',
-            city: 'Los Angeles',
-            state: 'CA',
-            zip: '91402'
+            street: '',
+            city: '',
+            state: '',
+            zip: ''
         },
-        phone: '123456789',
-        username: 'hayats',
-        password: '*****'
+        email: '',
+        phone: '',
+        username: '',
+        password: ''
     },
     userLibrary:[
         {
@@ -114,10 +114,10 @@ const initialState = {
         }        
     ],
     currentRequestsFilter: 'all',
-    currentTab: 'requests',
+    currentTab: 'profile',
     editing: null,
     addBookView: 'hidden',
-    bookView: 'users', //'users', 'info', null
+    bookView: null, //'users', 'info', null
     viewingBookInfo:{
         isbn: '456789',
         thumbnail: 'http://www.dogbreedslist.info/uploads/allimg/dog-pictures/Papillon-dog-1.jpg',
@@ -165,10 +165,6 @@ const initialState = {
 };
 
 export const bookReducer = (state=initialState, action) => {
-    if(action.type === 'DEMO_LOG_IN'){
-        return Object.assign({}, state, { authenticated: true });
-    }
-
     if(action.type === 'LOG_IN_CLICK'){
         //check if the action.button and update state accordingly
         if(action.button === 'cancel'){
@@ -207,45 +203,6 @@ export const bookReducer = (state=initialState, action) => {
         return Object.assign({}, state, { editing: null  });
     }
 
-    if(action.type === 'SAVE_EDIT'){
-        if(action.input === 'email'){
-            return Object.assign({}, 
-                state, 
-                { 
-                    editing: null,
-                    userInfo: {...state.userInfo, email: action.value }
-                }
-            );
-        }
-        else if(action.input === 'phone'){
-            return Object.assign({}, 
-                state, 
-                {
-                    editing: null,
-                    userInfo: {...state.userInfo, phone: action.value }
-                }
-            );
-        }
-        else if(action.input === 'address'){
-            return Object.assign({}, 
-                state, 
-                {
-                    editing: null,
-                    userInfo: {...state.userInfo, address: action.value }
-                }
-            );
-        }
-        else if(action.input === 'password'){
-            return Object.assign({}, 
-                state, 
-                {
-                    editing: null,
-                    userInfo: {...state.userInfo, password: action.value }
-                }
-            );
-        }
-    }
-
     if(action.type === 'SEARCH_CLICK'){
         return Object.assign({}, 
             state, 
@@ -270,7 +227,7 @@ export const bookReducer = (state=initialState, action) => {
     }
 
     if(action.type === 'LOADING_OFF'){
-        console.log('turning loading off');
+        return Object.assign({}, state, { loading: false });
     }
 
     if(action.type === 'PAGINATION_CLICK'){
@@ -329,6 +286,61 @@ export const bookReducer = (state=initialState, action) => {
         });
 
         return Object.assign({}, state, { requests: updatedList });
+    }
+
+    if(action.type === 'FETCH_PROFILE'){
+        return Object.assign({}, state, { loading: true });
+    }
+
+    if(action.type === 'FETCH_PROFILE_SUCCESS'){
+        const accountInfo = {
+            name: `${action.payload.name.firstName} ${action.payload.name.lastName}`,
+            email: action.payload.email,
+            address: action.payload.address,
+            phone: action.payload.phoneNumber,
+            username: action.payload.username,
+            password: action.payload.password
+        }
+        return Object.assign({}, 
+            state, 
+            {
+                loading: false, 
+                authenticated: true,
+                userInfo: accountInfo
+            }
+        );
+    }
+
+    if(action.type === 'BACK_TO_HOME'){
+        return Object.assign({}, state, { authenticated: false });
+    }
+
+    if(action.type === 'SHOW_ENTRY_FORM'){
+        return Object.assign({}, state, {userEntry: action.form});
+    }
+
+    if(action.type === 'UPDATE_USER_ENTRY'){
+        return Object.assign({}, state, {userEntry: action.value});
+    }
+
+    if(action.type === 'UPDATE_PROFILE'){
+        console.log('updating');
+    }
+
+    if(action.type === 'UPDATE_PROFILE_SUCCESS'){
+        const updatedInfo = {
+            name: `${action.payload.name.firstName} ${action.payload.name.lastName}`,
+            email: action.payload.email,
+            address: action.payload.address,
+            phone: action.payload.phoneNumber,
+            username: action.payload.username,
+            password: action.payload.password
+        }
+        return Object.assign({}, state, {editing: false, userInfo: updatedInfo});
+    }
+
+    if(action.type === 'UPDATE_PROFILE_ERROR'){
+        console.log('error');
     }
 
     return state;

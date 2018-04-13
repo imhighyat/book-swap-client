@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {editInfo, cancelEdit, saveEdit} from '../actions';
+import {editInfo, cancelEdit, updateProfile} from '../actions';
 
 export class Profile extends React.Component{
     onEdit(e, info){
@@ -17,7 +17,7 @@ export class Profile extends React.Component{
         e.preventDefault();
         if(input === 'address'){
             this.props.dispatch(
-                saveEdit(input,
+                updateProfile(input,
                     {
                         street: this.refs.street.value,
                         city: this.refs.city.value,
@@ -29,7 +29,7 @@ export class Profile extends React.Component{
         else{
             const value = this.refs[input].value;
             if(value){
-                this.props.dispatch(saveEdit(input, value));
+                this.props.dispatch(updateProfile(input, value));
             }
         }
     }
@@ -52,10 +52,10 @@ export class Profile extends React.Component{
                 <div className='phone'>
                     <h4>Phone Number: </h4>
                     {this.props.editing !== 'phone' && <p>{this.props.user.phone}</p>}
-                    {this.props.editing === 'phone' && <input defaultValue={this.props.user.phone} ref='phone' />}
+                    {this.props.editing === 'phone' && <input defaultValue={this.props.user.phone} ref='phoneNumber' />}
                     {this.props.editing !== 'phone' && <button onClick={e=> this.onEdit(e, 'phone')}><i className="fas fa-edit"></i></button>}
                     {this.props.editing === 'phone' && <button onClick={e=> this.onCancelEdit(e)}><i className="far fa-times-circle"></i></button>}
-                    {this.props.editing === 'phone' && <button onClick={e=> this.onSaveEdit(e, 'phone')}><i className="far fa-check-circle"></i></button>}
+                    {this.props.editing === 'phone' && <button onClick={e=> this.onSaveEdit(e, 'phoneNumber')}><i className="far fa-check-circle"></i></button>}
                 </div>
                 <div className='address'>
                     <h4>Shipping Address: </h4>

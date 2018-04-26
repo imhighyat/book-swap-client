@@ -1,25 +1,18 @@
 import React from 'react';
-import {connect} from 'react-redux';
-import {Route} from 'react-router-dom';
-import {updateUserEntry, fetchProfile} from '../actions'
-import Loading from './loading';;
+import { connect } from 'react-redux';
+import { Route } from 'react-router-dom';
+import Loading from './../HomePage/LoadingModal';
+//import actions here for complete signup
 
-export class SignUp extends React.Component{
-	signUpClick(e, history){
+export class SignUp extends React.Component {
+	handleCancelClick(e, history){
 		e.preventDefault();
-		this.props.dispatch(fetchProfile());
-		setTimeout(()=>history.push('/dashboard'), 3000);
-	}
-
-	cancelSignUp(e, history){
-		e.preventDefault();
-		this.props.dispatch(updateUserEntry('null'));
 		history.push('/');
 	}
-	
+
 	render(){
 		return (
-			<Route render={({history}) => (
+        	<Route render={({history}) => (
 		        <div className='sign-up'>
 					<form>
 						<label>Full Name</label>
@@ -43,8 +36,8 @@ export class SignUp extends React.Component{
 						<label>Password</label>
 						<input type='password' name='password' placeholder='Enter preferred password' required />
 						<div className='sign-up-buttons'>
-							<button onClick={(e) => this.cancelSignUp(e, history)}>Cancel</button>
-							<button onClick={(e) => this.signUpClick(e, history)}>Complete Sign Up</button>
+							<button onClick={ e => this.handleCancelClick(e, history) }>Cancel</button>
+							<button>Complete Sign Up</button>
 						</div>
 					</form>
 					{this.props.loading && <Loading />}
@@ -55,7 +48,7 @@ export class SignUp extends React.Component{
 }
 
 const mapStateToProps = state => ({
-	loading: state.loading
+	loading: state.userEntryReducer.loading
 });
 
 export default connect(mapStateToProps)(SignUp);

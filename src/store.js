@@ -1,8 +1,8 @@
-import {createStore, combineReducers, applyMiddleware} from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
+import rootReducer from './reducers';
 
-import {bookReducer} from './reducers';
 
-export default createStore(bookReducer, 
+export default createStore(rootReducer, 
 	window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
 	applyMiddleware(thunk));
